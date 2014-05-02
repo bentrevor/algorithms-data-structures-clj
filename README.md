@@ -1,0 +1,1 @@
+Clojure version of [Patrick's](https://github.com/patrickgombert) and [Wai Lee's](https://github.com/skatenerd) [data structures and algorithms course](https://github.com/skatenerd/AlgorithmsDataStructures).

@@ -66,3 +66,20 @@
 
   (it "fails to insert when out of bounds"
     (should-throw (insert-before 100 :value {}))))
+
+(describe "sorted-insert"
+  (it "can insert into an empty list"
+    (let [list (sorted-insert 10 {})]
+      (should= 10
+               (get-value 0 list))))
+
+  (it "inserts elements in order from least to greatest"
+    (let [list (sorted-insert 4 (sorted-insert 0 (sorted-insert 5 (sorted-insert 10 {}))))]
+      (should= 0
+               (get-value 0 list))
+      (should= 4
+               (get-value 1 list))
+      (should= 5
+               (get-value 2 list))
+      (should= 10
+               (get-value 3 list)))))

@@ -24,6 +24,12 @@
 (defn insert-before [index value list]
   (cond
    (or (< index 0) (> index (length list))) (throw "Swag")
-   (= 0 index)                         (prepend value list)
+   (= 0 index)                              (prepend value list)
    :else {:value (:value list)
           :next-node (insert-before (- index 1) value (:next-node list))}))
+
+(defn sorted-insert [value list]
+  (if (or (= (length list) 0) (< value (:value list)))
+    (prepend value list)
+    {:value (:value list)
+     :next-node (sorted-insert value (:next-node list))}))

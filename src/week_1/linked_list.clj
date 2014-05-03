@@ -1,35 +1,51 @@
 (ns week-1.linked-list)
 
+(defn build-list [head tail]
+  {:value head
+   :next-node tail })
+
+(defn empty-list? [list]
+  (= {} list))
+
 (defn prepend [value list]
-  {:value value
-   :next-node list})
+  (build-list value list))
 
 (defn get-value [index list]
   (if (= 0 index)
     (:value list)
-    (get-value (- index 1) (:next-node list))))
+    (recur (dec index) (:next-node list))))
 
 (defn append [value list]
-  (if (= {} list)
-    {:value value
-     :next-node {}}
-    {:value (:value list)
-     :next-node (append value (:next-node list))}))
+  (if (empty-list? list)
+    (build-list value
+                {})
+    (build-list (:value list)
+                (append value (:next-node list)))))
 
 (defn length [list]
-  (if (= list {})
+  (if (empty-list? list)
     0
-    (+ 1 (length (:next-node list)))))
+    (inc (length (:next-node list)))))
 
 (defn insert-before [index value list]
   (cond
    (or (< index 0) (> index (length list))) (throw "Swag")
    (= 0 index)                              (prepend value list)
-   :else {:value (:value list)
-          :next-node (insert-before (- index 1) value (:next-node list))}))
+   :else (build-list (:value list)
+                     (insert-before (dec index) value (:next-node list)))))
 
 (defn sorted-insert [value list]
-  (if (or (= (length list) 0) (< value (:value list)))
+  (if (or (empty-list? list) (< value (:value list)))
     (prepend value list)
-    {:value (:value list)
-     :next-node (sorted-insert value (:next-node list))}))
+    (build-list (:value list)
+                (sorted-insert value (:next-node list)))))
+
+(defn- reverse-iter [list index list-so-far]
+  (if
+   (= (length list) index) list-so-far
+   (recur list
+          (inc index)
+          (prepend (get-value index list) list-so-far))))
+
+(defn my-reverse [list]
+  (reverse-iter list 0 {}))

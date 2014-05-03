@@ -83,3 +83,24 @@
                (get-value 2 list))
       (should= 10
                (get-value 3 list)))))
+
+(describe "my-reverse"
+  (it "reverses an empty list"
+    (should= {}
+             (my-reverse {})))
+
+  (it "reverses a list with one element"
+    (let [list {:value :yolo
+                :next-node {}}]
+      (should= list
+               (my-reverse list))))
+
+  (it "reverses a list"
+    (let [list (prepend :a (prepend :b (prepend :c {})))
+          reversed-list (my-reverse list)]
+      (should= :c
+               (get-value 0 reversed-list))
+      (should= :b
+               (get-value 1 reversed-list))
+      (should= :a
+               (get-value 2 reversed-list)))))

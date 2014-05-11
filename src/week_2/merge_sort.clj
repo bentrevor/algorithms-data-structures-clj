@@ -1,12 +1,16 @@
 (ns week-2.merge-sort)
 
+(defn- tail [list]
+  (vec (drop 1 list)))
+
 (defn- merge-lists-iter [left right acc]
-  (cond
-   (and (empty? left) (empty? right)) acc
-   (empty? left)                      (recur left (vec (drop 1 right)) (conj acc (first right)))
-   (empty? right)                     (recur (vec (drop 1 left)) right (conj acc (first left)))
-   (< (first left) (first right))     (recur (vec (drop 1 left)) right (conj acc (first left)))
-   :else                              (recur left (vec (drop 1 right)) (conj acc (first right)))))
+  (let [left-val (first left)
+        right-val (first right)]
+    (cond
+     (and (empty? left) (empty? right))                 acc
+     (empty? left)                                      (recur left        (tail right) (conj acc right-val))
+     (or (empty? right) (< (first left) (first right))) (recur (tail left) right        (conj acc left-val))
+     :else                                              (recur left        (tail right) (conj acc right-val)))))
 
 (defn merge-lists [left right]
   (merge-lists-iter left right []))
